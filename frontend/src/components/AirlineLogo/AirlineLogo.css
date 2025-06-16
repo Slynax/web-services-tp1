@@ -1,0 +1,96 @@
+.airline-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.airline-logo:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.airline-logo--small {
+  width: 24px;
+  height: 24px;
+}
+
+.airline-logo--medium {
+  width: 32px;
+  height: 32px;
+}
+
+.airline-logo--large {
+  width: 48px;
+  height: 48px;
+}
+
+/* Image styles */
+.airline-logo-img {
+  display: block;
+  object-fit: contain;
+  background: white;
+}
+
+.airline-logo-img--small {
+  width: 24px;
+  height: 24px;
+}
+
+.airline-logo-img--medium {
+  width: 32px;
+  height: 32px;
+}
+
+.airline-logo-img--large {
+  width: 48px;
+  height: 48px;
+}
+
+/* Fallback styles */
+.airline-logo-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: bold;
+  border-radius: 50%;
+}
+
+.airline-logo-fallback--small {
+  width: 24px;
+  height: 24px;
+}
+
+.airline-logo-fallback--medium {
+  width: 32px;
+  height: 32px;
+}
+
+.airline-logo-fallback--large {
+  width: 48px;
+  height: 48px;
+}
+
+.airline-code {
+  font-size: 0.6em;
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.airline-logo-fallback--small .airline-code {
+  font-size: 8px;
+}
+
+.airline-logo-fallback--medium .airline-code {
+  font-size: 10px;
+}
+
+.airline-logo-fallback--large .airline-code {
+  font-size: 14px;
+}

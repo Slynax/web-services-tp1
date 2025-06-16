@@ -1,4 +1,5 @@
 import type { Flight } from '@/types/Flight'
+import AirlineLogo from '@/components/AirlineLogo'
 import './FlightCard.css'
 
 interface FlightCardProps {
@@ -16,10 +17,12 @@ export default function FlightCard({ flight }: FlightCardProps) {
     })
   }
 
-  return (    <div className="flight-card">
-      <div className="flight-header">
+  return (    <div className="flight-card">      <div className="flight-header">
         <h3 className="flight-number">{flight.numero}</h3>
-        <span className="flight-company">{flight.compagnie}</span>
+        <div className="flight-company">
+          <AirlineLogo airline={flight.compagnie} size="small" />
+          <span className="company-name">{flight.compagnie}</span>
+        </div>
       </div>
       
       <div className="flight-route">
