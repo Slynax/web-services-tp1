@@ -24,9 +24,14 @@ function App() {
     }
   }
 
-  const handleGoogleLogin = () => {
-    // TODO: Implement Google OAuth 2.1 login
-    console.log('Google OAuth 2.1 login will be implemented here')
+  const handleGoogleLogin = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/v1/auth/google');
+      const { authUrl } = await response.json();
+      window.location.href = authUrl;
+    } catch (error) {
+      console.error('Erreur lors de la connexion avec Google:', error);
+    }
   }
 
   useEffect(() => {

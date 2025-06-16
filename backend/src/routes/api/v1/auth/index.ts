@@ -8,7 +8,7 @@ const router = Router();
 const oauth2Client = new OAuth2Client(
   process.env.OAUTH_CLIENT_ID,
   process.env.OAUTH_SECRET,
-  'http://localhost:3000/callback'
+  'http://localhost:5173/callback'
 );
 
 router.get('/google', (req: Request, res: Response) => {
