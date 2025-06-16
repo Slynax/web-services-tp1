@@ -1,15 +1,9 @@
 import { Router, Request, Response } from 'express';
-import { OAuth2Client } from 'google-auth-library';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const router = Router();
-const oauth2Client = new OAuth2Client(
-  process.env.OAUTH_CLIENT_ID,
-  process.env.OAUTH_SECRET,
-  'http://localhost:5173/callback'
-);
 
 router.get('/google', (req: Request, res: Response) => {
   const scopes = [
@@ -17,12 +11,16 @@ router.get('/google', (req: Request, res: Response) => {
     'https://www.googleapis.com/auth/userinfo.email'
   ];
 
-  const authUrl = oauth2Client.generateAuthUrl({
-    access_type: 'offline',
-    scope: scopes,
+  const params = new URLSearchParams({
+    client_id: process.env.OAUTH_CLIENT_ID!,
+    redirect_uri: 'http://localhost:5173/callback',
+    response_type: 'code',
+    scope: scopes.join(' '),
+    access_type: 'online',
     prompt: 'consent'
   });
 
+  const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
   res.json({ authUrl });
 });
 
