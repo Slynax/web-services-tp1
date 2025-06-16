@@ -4,7 +4,7 @@ import { config } from '@/config';
 export class FlightService {
   static async getFlights(): Promise<Flight[]> {
     try {
-      const response = await fetch(`${config.apiBaseUrl}/vols`);
+      const response = await fetch(`${config.apiBaseUrl}/flights`);
       
       if (!response.ok) {
         throw new Error(`Erreur HTTP: ${response.status}`);
