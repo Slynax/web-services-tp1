@@ -5,21 +5,62 @@
 }
 
 .app-header {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   color: white;
   margin-bottom: 40px;
+  padding: 0 20px;
 }
 
-.app-header h1 {
+.app-header-content {
+  text-align: center;
+  flex: 1;
+}
+
+.login-section {
+  min-width: 120px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.app-header-content h1 {
   font-size: 3rem;
   margin: 0 0 16px 0;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.app-header p {
+.app-header-content p {
   font-size: 1.2rem;
   opacity: 0.9;
   margin: 0;
+}
+
+.login-button {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.login-button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.google-icon {
+  width: 18px;
+  height: 18px;
 }
 
 .app-main {
@@ -27,7 +68,15 @@
   margin: 0 auto;
 }
 
+.flights-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 4vw;
+  margin-top: 20px;
+}
+
 .flights-list h2 {
+  grid-column: 1 / -1;
   color: white;
   text-align: center;
   margin-bottom: 24px;
@@ -54,11 +103,21 @@
     padding: 10px;
   }
   
-  .app-header h1 {
+  .app-header {
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 10px;
+  }
+  
+  .app-header-content h1 {
     font-size: 2rem;
   }
   
-  .app-header p {
+  .app-header-content p {
     font-size: 1rem;
+  }
+    .flights-list {
+    grid-template-columns: 1fr;
+    gap: 24px;
   }
 }
