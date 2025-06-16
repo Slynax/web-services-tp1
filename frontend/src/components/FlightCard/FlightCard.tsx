@@ -6,10 +6,10 @@ interface FlightCardProps {
 }
 
 export default function FlightCard({ flight }: FlightCardProps) {
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('fr-FR', {
+  const formatDateTime = (dateTimeString: string) => {
+    return new Date(dateTimeString).toLocaleDateString('fr-FR', {
       year: 'numeric',
-      month: 'long',
+      month: 'short',
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
@@ -34,16 +34,14 @@ export default function FlightCard({ flight }: FlightCardProps) {
           <span className="airport-code">{flight.destination}</span>
           <span className="airport-name">Arrivée</span>
         </div>
-      </div>
-
-      <div className="flight-times">
+      </div>      <div className="flight-times">
         <div className="time">
           <span className="time-label">Départ</span>
-          <span className="time-value">{formatDate(flight.heureDepart)}</span>
+          <span className="time-value">{formatDateTime(flight.heureDepart)}</span>
         </div>
         <div className="time">
           <span className="time-label">Arrivée</span>
-          <span className="time-value">{formatDate(flight.heureArrivee)}</span>
+          <span className="time-value">{formatDateTime(flight.heureArrivee)}</span>
         </div>
       </div>
 
