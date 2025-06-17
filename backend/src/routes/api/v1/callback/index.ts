@@ -26,23 +26,23 @@ router.post('/', async (req: Request, res: Response) => {
     const { state } = req.query;
     
     if (!code) {
-      return res.status(400).json({ error: 'Code d\'autorisation manquant' });
+      return res.status(400).json({ error: 'Authorization code missing' });
     }
 
-    // OAuth 2.1: Validate state parameter for CSRF protection
     if (!state || !expected_state || state !== expected_state) {
-      return res.status(400).json({ error: 'État invalide - possible attaque CSRF' });
-    }    // OAuth 2.1: PKCE provides additional security alongside client secret for web apps
-    if (!code_verifier) {
-      return res.status(400).json({ error: 'Code verifier manquant pour PKCE' });
+      return res.status(400).json({ error: 'Invalid state - possible CSRF attack' });
     }
-      const tokenParams = new URLSearchParams({
+
+    if (!code_verifier) {
+      return res.status(400).json({ error: 'Code verifier missing for PKCE' });
+    }
+
+    const tokenParams = new URLSearchParams({
       client_id: process.env.OAUTH_CLIENT_ID!,
       client_secret: process.env.OAUTH_SECRET!,
       code: code as string,
       grant_type: 'authorization_code',
       redirect_uri: 'http://localhost:5173/callback',
-      // OAuth 2.1: PKCE code verifier for additional security
       code_verifier: code_verifier
     });
 
@@ -56,7 +56,7 @@ router.post('/', async (req: Request, res: Response) => {
 
     if (!tokenResponse.ok) {
       const errorData = await tokenResponse.text();
-      throw new Error(`Erreur lors de l'échange du code: ${tokenResponse.status} - ${errorData}`);
+      throw new Error(`Error during code exchange: ${tokenResponse.status} - ${errorData}`);
     }
 
     const tokens: TokenResponse = await tokenResponse.json();
@@ -68,7 +68,7 @@ router.post('/', async (req: Request, res: Response) => {
     });
 
     if (!userResponse.ok) {
-      throw new Error(`Erreur lors de la récupération des informations utilisateur: ${userResponse.status}`);
+      throw new Error(`Error retrieving user information: ${userResponse.status}`);
     }
 
     const userInfo: GoogleUserInfo = await userResponse.json();
@@ -83,8 +83,8 @@ router.post('/', async (req: Request, res: Response) => {
 
       
   } catch (error) {
-    console.error('Erreur détaillée lors de l\'authentification:', error);
-    res.status(500).json({ error: 'Erreur lors de l\'authentification' });
+    console.error('Detailed authentication error:', error);
+    res.status(500).json({ error: 'Authentication error' });
   }
 });
 

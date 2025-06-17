@@ -13,7 +13,6 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [user, setUser] = useState<User | null>(null)
-
   const fetchFlights = async () => {
     try {
       setLoading(true)
@@ -21,19 +20,19 @@ function App() {
       const flightsData = await FlightService.getFlights()
       setFlights(flightsData)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Une erreur est survenue lors du chargement des vols')
+      setError(err instanceof Error ? err.message : 'An error occurred while loading flights')
     } finally {
       setLoading(false)
     }
   }
+
   const handleGoogleLogin = async () => {
     try {
-      // OAuth 2.1: Use PKCE flow
       const authUrl = await AuthService.initializeOAuth();
       window.location.href = authUrl;
     } catch (error) {
-      console.error('Erreur lors de la connexion avec Google:', error);
-      setError('Erreur lors de l\'initialisation de la connexion');
+      console.error('Google login error:', error);
+      setError('Connection initialization error');
     }
   }
 
@@ -44,7 +43,6 @@ function App() {
 
   useEffect(() => {
     fetchFlights()
-    // Charger les informations utilisateur depuis les cookies
     const userFromCookie = AuthService.getUser();
     setUser(userFromCookie);
   }, [])
@@ -59,10 +57,9 @@ function App() {
 
   return (
     <div className="app">
-      <header className="app-header">
-        <div className="app-header-content">
-          <h1>✈️ Recherche de Vols</h1>
-          <p>Trouvez et réservez votre prochain vol</p>
+      <header className="app-header">        <div className="app-header-content">
+          <h1>✈️ Flight Search</h1>
+          <p>Find and book your next flight</p>
         </div>
         <div className="login-section">
           {user ? (
@@ -70,7 +67,7 @@ function App() {
               {user.photo && (
                 <img 
                   src={user.photo} 
-                  alt={user.name || 'Photo de profil'} 
+                  alt={user.name || 'Profile photo'} 
                   className="user-avatar"
                 />
               )}
@@ -79,7 +76,7 @@ function App() {
                 <span className="user-email">{user.email}</span>
               </div>
               <button onClick={handleLogout} className="logout-button">
-                Déconnexion
+                Logout
               </button>
             </div>          ) : (
             <GoogleLoginButton onLogin={handleGoogleLogin} />
@@ -90,11 +87,11 @@ function App() {
       <main className="app-main">
         {flights.length === 0 ? (
           <div className="no-flights">
-            <p>Aucun vol disponible pour le moment.</p>
+            <p>No flights available at the moment.</p>
           </div>
         ) : (
           <div className="flights-list">
-            <h2>Vols disponibles ({flights.length})</h2>
+            <h2>Available flights ({flights.length})</h2>
             {flights.map((flight) => (
               <FlightCard key={flight.id} flight={flight} />
             ))}

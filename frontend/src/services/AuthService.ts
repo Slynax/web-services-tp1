@@ -11,33 +11,32 @@ export class AuthService {
   private static readonly CODE_VERIFIER_KEY = 'oauth_code_verifier';
   private static readonly STATE_KEY = 'oauth_state';
   private static readonly COOKIE_EXPIRES = 7;
-  // OAuth 2.1: Store PKCE parameters securely
+
   static async initializeOAuth(): Promise<string> {
     try {
       const response = await fetch('http://localhost:3000/api/v1/auth/google');
       const data = await response.json();
       
-      // Store PKCE parameters from backend response
       sessionStorage.setItem(this.CODE_VERIFIER_KEY, data.codeVerifier);
       sessionStorage.setItem(this.STATE_KEY, data.state);
       
       return data.authUrl;
     } catch (error) {
-      console.error('Erreur lors de l\'initialisation OAuth:', error);
-      throw new Error('Impossible d\'initialiser l\'authentification');
+      console.error('OAuth initialization error:', error);
+      throw new Error('Unable to initialize authentication');
     }
   }
-  // OAuth 2.1: Handle callback with PKCE verification
+
   static async handleCallback(code: string, state: string): Promise<User> {
     const storedCodeVerifier = sessionStorage.getItem(this.CODE_VERIFIER_KEY);
     const storedState = sessionStorage.getItem(this.STATE_KEY);
     
     if (!storedCodeVerifier || !storedState) {
-      throw new Error('Données PKCE manquantes');
+      throw new Error('PKCE data missing');
     }
     
     if (state !== storedState) {
-      throw new Error('État invalide - possible attaque CSRF');
+      throw new Error('Invalid state - possible CSRF attack');
     }
     
     try {
@@ -55,12 +54,11 @@ export class AuthService {
       
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Erreur d\'authentification');
+        throw new Error(errorData.error || 'Authentication error');
       }
       
       const data = await response.json();
       
-      // Clean up PKCE data
       this.cleanupOAuthData();
       
       return data.user;
@@ -92,7 +90,7 @@ export class AuthService {
     try {
       return JSON.parse(userCookie) as User;
     } catch (error) {
-      console.error('Erreur lors du parsing du cookie utilisateur:', error);
+      console.error('User cookie parsing error:', error);
       this.clearUser();
       return null;
     }
@@ -105,4 +103,4 @@ export class AuthService {
   static clearUser(): void {
     Cookies.remove(this.USER_COOKIE);
   }
-} 
+}

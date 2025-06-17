@@ -6,8 +6,7 @@ import { AuthService } from '@/services/AuthService';
 
 const Callback = () => {
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
-  useEffect(() => {
+  const navigate = useNavigate();  useEffect(() => {
     const handleCallback = async () => {
       try {
         const urlParams = new URLSearchParams(window.location.search);
@@ -15,20 +14,19 @@ const Callback = () => {
         const state = urlParams.get('state');
 
         if (!code) {
-          throw new Error('Code d\'autorisation manquant');
+          throw new Error('Authorization code missing');
         }
 
         if (!state) {
-          throw new Error('État manquant');
+          throw new Error('State missing');
         }
 
-        // OAuth 2.1: Use PKCE flow
         const user = await AuthService.handleCallback(code, state);
         AuthService.setUser(user);
 
         navigate('/');
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Une erreur est survenue');
+        setError(err instanceof Error ? err.message : 'An error occurred');
       }
     };
 
@@ -49,7 +47,7 @@ const Callback = () => {
   return (
     <div className="callback-container">
       <LoadingSpinner />
-      <p>Authentification en cours...</p>
+      <p>Authentication in progress...</p>
     </div>
   );
 };
