@@ -26,14 +26,14 @@ function App() {
       setLoading(false)
     }
   }
-
   const handleGoogleLogin = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/v1/auth/google');
-      const { authUrl } = await response.json();
+      // OAuth 2.1: Use PKCE flow
+      const authUrl = await AuthService.initializeOAuth();
       window.location.href = authUrl;
     } catch (error) {
       console.error('Erreur lors de la connexion avec Google:', error);
+      setError('Erreur lors de l\'initialisation de la connexion');
     }
   }
 

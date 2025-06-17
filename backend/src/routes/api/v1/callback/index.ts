@@ -19,25 +19,31 @@ interface TokenResponse {
 
 const router = Router();
 
-router.get('/', async (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
   try {
     
-    const { code, error } = req.query;
-    
-    if (error) {
-      return res.status(400).json({ error: `Erreur OAuth: ${error}` });
-    }
+    const { code, code_verifier, expected_state } = req.body;
+    const { state } = req.query;
     
     if (!code) {
       return res.status(400).json({ error: 'Code d\'autorisation manquant' });
     }
-    
-    const tokenParams = new URLSearchParams({
+
+    // OAuth 2.1: Validate state parameter for CSRF protection
+    if (!state || !expected_state || state !== expected_state) {
+      return res.status(400).json({ error: 'État invalide - possible attaque CSRF' });
+    }    // OAuth 2.1: PKCE provides additional security alongside client secret for web apps
+    if (!code_verifier) {
+      return res.status(400).json({ error: 'Code verifier manquant pour PKCE' });
+    }
+      const tokenParams = new URLSearchParams({
       client_id: process.env.OAUTH_CLIENT_ID!,
       client_secret: process.env.OAUTH_SECRET!,
       code: code as string,
       grant_type: 'authorization_code',
-      redirect_uri: 'http://localhost:5173/callback'
+      redirect_uri: 'http://localhost:5173/callback',
+      // OAuth 2.1: PKCE code verifier for additional security
+      code_verifier: code_verifier
     });
 
     const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {

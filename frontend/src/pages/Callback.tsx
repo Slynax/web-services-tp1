@@ -7,25 +7,24 @@ import { AuthService } from '@/services/AuthService';
 const Callback = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-
   useEffect(() => {
     const handleCallback = async () => {
       try {
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
+        const state = urlParams.get('state');
 
         if (!code) {
           throw new Error('Code d\'autorisation manquant');
         }
 
-        const response = await fetch(`http://localhost:3000/api/v1/callback?code=${code}`);
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || 'Erreur lors de l\'authentification');
+        if (!state) {
+          throw new Error('État manquant');
         }
 
-        AuthService.setUser(data.user);
+        // OAuth 2.1: Use PKCE flow
+        const user = await AuthService.handleCallback(code, state);
+        AuthService.setUser(user);
 
         navigate('/');
       } catch (err) {
