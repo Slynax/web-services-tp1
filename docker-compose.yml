@@ -1,0 +1,18 @@
+services:
+  backend:
+    image: registry.infres.fr/flight-app-backend:latest
+    build: ./backend
+    container_name: flight-app-backend
+    ports:
+      - "3000:3000"
+
+  frontend:
+    image: registry.infres.fr/flight-app-frontend:latest
+    build: ./frontend
+    container_name: flight-app-frontend
+    ports:
+      - "5001:80"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:3000/api/v1
+    depends_on:
+      - backend
