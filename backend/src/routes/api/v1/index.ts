@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import Flights from './flights';
 import Auth from './auth';
-import Callback from './callback';
+import Callback from './callback/google';
 
 const router = Router();
 

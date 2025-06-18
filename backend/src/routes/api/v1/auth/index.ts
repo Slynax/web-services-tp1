@@ -30,7 +30,7 @@ router.get('/google', (req: Request, res: Response) => {
 
   const params = new URLSearchParams({
     client_id: process.env.OAUTH_CLIENT_ID!,
-    redirect_uri: 'http://localhost:5173/callback',
+    redirect_uri: 'http://localhost:5001/callback/google',
     response_type: 'code',
     scope: scopes.join(' '),
     state: state,
